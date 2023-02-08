@@ -19,14 +19,11 @@ namespace Clientes_API.Services
             
             try
             {
-                using (var db = new Context())
-                {
                     Cliente cliente = GetClienteDetailsById(ClienteId);
-                    db.Entry(cliente).State = EntityState.Deleted;
+                    _context.Entry(cliente).State = EntityState.Deleted;
 
                     model.IsSuccess = true;
                     model.Message = "Cliente eliminado exitosamente";
-                }
             }
             catch (Exception)
             {
@@ -41,10 +38,7 @@ namespace Clientes_API.Services
             Cliente cliente = null;
             try
             {
-                using (var db = new Context())
-                {
-                    cliente = db.Clientes.Find(id);
-                }
+                cliente = _context.Clientes.Find(id);
             }
             catch (Exception)
             {
@@ -58,12 +52,10 @@ namespace Clientes_API.Services
             List<Cliente> lista = null;
             try
             {
-                using (var db = new Context())
-                {
-                    lista = db.Clientes.Include("Addresses").ToList();
-                }
+                lista = _context.Clientes
+                    .ToList();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
@@ -76,23 +68,16 @@ namespace Clientes_API.Services
             
             try
             {
-                using (var db = new Context())
-                {
-                    if (GetClienteDetailsById(ClienteModel.Id) == null)
-                    {
-                        db.Clientes.Add(ClienteModel);
-                    }
+                    if (_context.Clientes.Find(ClienteModel.ClienteId) == null)
+                        _context.Clientes.Add(ClienteModel);
                     else
-                    {
-                        db.Entry(ClienteModel).State = EntityState.Modified;
-                    }
+                        _context.Entry(ClienteModel).State = EntityState.Modified;
                     
-                    db.SaveChanges();
+                    _context.SaveChanges();
                     response.IsSuccess = true;
                     response.Message = "Cliente guardado exitosamente";
-                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 response.IsSuccess = false;
                 response.Message = "Error al guardar el cliente";
