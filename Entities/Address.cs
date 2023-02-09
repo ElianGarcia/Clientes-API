@@ -13,6 +13,7 @@ namespace Clientes_API.Entities
         public DateTime CreatedAt { get; set; }
         public bool Active { get; set; }
         public int ClienteId { get; set; }
+        public virtual Cliente? Cliente { get; set; }
 
         public Address()
         {

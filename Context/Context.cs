@@ -13,7 +13,9 @@ namespace Clientes_API.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cliente>()
-                .HasMany(c => c.Addresses);
+                .HasMany(c => c.Addresses)
+                .WithOne(a => a.Cliente)
+                .OnDelete(DeleteBehavior.Cascade);
         }
         
         public virtual DbSet<Cliente> Clientes { get; set; }

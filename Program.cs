@@ -14,6 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<Context>(x => x.UseSqlServer("workstation id=service-report-db.mssql.somee.com;packet size=4096;user id=eliangarciarguez_SQLLogin_1;pwd=\t3lqlyxvsao;data source=service-report-db.mssql.somee.com;persist security info=False;initial catalog=service-report-db;Integrated Security=false; Encrypt=false"));
 builder.Services.AddScoped<IClientesService, ClientesService>();
 builder.Services.AddScoped<IAddressesService, AddressesService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,

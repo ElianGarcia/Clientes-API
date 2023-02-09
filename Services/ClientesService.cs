@@ -12,23 +12,25 @@ namespace Clientes_API.Services
         {
             _context = context;
         }
-        
+
         public ResponseModel DeleteCliente(int ClienteId)
         {
             ResponseModel model = new ResponseModel();
-            
+
             try
             {
-                    Cliente cliente = GetClienteDetailsById(ClienteId);
-                    _context.Entry(cliente).State = EntityState.Deleted;
+                Cliente cliente = GetClienteDetailsById(ClienteId);
+                _context.Entry(cliente).State = EntityState.Deleted;
 
-                    model.IsSuccess = true;
-                    model.Message = "Cliente eliminado exitosamente";
+                _context.SaveChanges();
+
+                model.IsSuccess = true;
+                model.Message = "Cliente eliminado exitosamente";
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 model.IsSuccess = false;
-                model.Message = "Error al eliminar el cliente";                
+                model.Message = "Error al eliminar el cliente";
             }
             return model;
         }
@@ -65,17 +67,17 @@ namespace Clientes_API.Services
         public ResponseModel SaveCliente(Cliente ClienteModel)
         {
             ResponseModel response = new ResponseModel();
-            
+
             try
             {
-                    if (_context.Clientes.Find(ClienteModel.ClienteId) == null)
-                        _context.Clientes.Add(ClienteModel);
-                    else
-                        _context.Entry(ClienteModel).State = EntityState.Modified;
-                    
-                    _context.SaveChanges();
-                    response.IsSuccess = true;
-                    response.Message = "Cliente guardado exitosamente";
+                if (ClienteModel.ClienteId == 0)
+                    _context.Clientes.Add(ClienteModel);
+                else
+                    _context.Entry(ClienteModel).State = EntityState.Modified;
+
+                _context.SaveChanges();
+                response.IsSuccess = true;
+                response.Message = "Cliente guardado exitosamente";
             }
             catch (Exception e)
             {
